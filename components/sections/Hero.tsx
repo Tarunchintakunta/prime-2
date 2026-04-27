@@ -1,180 +1,179 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight, Play } from "lucide-react";
-import {
-  GoogleMark,
-  StripeMark,
-  AirbnbMark,
-  NotionMark,
-  SpotifyMark,
-} from "@/components/ui/Logos";
+import { useEffect, useRef, type FormEvent } from "react";
+import { Sparkles, ArrowRight } from "lucide-react";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.15 + i * 0.08,
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-    },
-  }),
-};
+const VIDEO_URL =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4";
+
+const FADE_MS = 500;
+const FADE_OUT_LEAD = 0.55;
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const fadingOutRef = useRef(false);
+  const rafRef = useRef<number | null>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const headlineY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 90]);
-  const headlineOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.2]);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const cancelAnim = () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+
+    const fade = (target: number, onDone?: () => void) => {
+      cancelAnim();
+      const start = performance.now();
+      const from = parseFloat(video.style.opacity || "0");
+      const tick = (now: number) => {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / FADE_MS);
+        const value = from + (target - from) * t;
+        video.style.opacity = String(value);
+        if (t < 1) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          rafRef.current = null;
+          onDone?.();
+        }
+      };
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    const handleLoaded = () => {
+      video.style.opacity = "0";
+      video.play().catch(() => {});
+      fade(1);
+    };
+
+    const handleTimeUpdate = () => {
+      if (!video.duration || isNaN(video.duration)) return;
+      if (
+        !fadingOutRef.current &&
+        video.currentTime >= video.duration - FADE_OUT_LEAD
+      ) {
+        fadingOutRef.current = true;
+        fade(0);
+      }
+    };
+
+    const handleEnded = () => {
+      video.style.opacity = "0";
+      window.setTimeout(() => {
+        try {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        } catch {
+          // ignore
+        }
+        fadingOutRef.current = false;
+        fade(1);
+      }, 100);
+    };
+
+    video.style.opacity = "0";
+    video.addEventListener("loadeddata", handleLoaded);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("ended", handleEnded);
+
+    if (video.readyState >= 2) handleLoaded();
+
+    return () => {
+      cancelAnim();
+      video.removeEventListener("loadeddata", handleLoaded);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget as HTMLFormElement);
+    console.log("hero email signup:", data.get("email"));
+  };
 
   return (
     <section
-      ref={sectionRef}
       id="top"
-      className="relative flex min-h-screen w-full items-center overflow-hidden"
+      className="relative min-h-screen overflow-hidden bg-[#0a192f] pt-32 pb-20"
     >
-      {/* Provided video — DO NOT MODIFY */}
       <video
-        autoPlay
-        loop
+        ref={videoRef}
+        className="absolute top-0 left-0 w-full h-full object-cover"
+        src={VIDEO_URL}
         muted
+        autoPlay
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
-      >
-        <source
-          src="https://res.cloudinary.com/dfonotyfb/video/upload/v1775585556/dds3_1_rqhg7x.mp4"
-          type="video/mp4"
-        />
-      </video>
-
-      {/* Stacked overlays */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[1] bg-gradient-to-b from-black/40 via-black/60 to-black"
+        preload="auto"
+        style={{ opacity: 0, transition: "none" }}
       />
+
       <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[2] bg-radial-vignette"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(2,6,23,0.55) 0%, rgba(2,6,23,0.25) 40%, rgba(2,6,23,0.75) 100%)",
+        }}
       />
-      <div aria-hidden="true" className="grain z-[3]" />
 
-      {/* Content */}
-      <motion.div
-        style={{ y: headlineY, opacity: headlineOpacity }}
-        className="container relative z-10 mx-auto max-w-7xl px-6 pt-24 md:pt-32"
-      >
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={0}
-          className="inline-flex items-center gap-2 rounded-full glass px-3.5 py-1.5 text-xs text-white/85"
-        >
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inset-0 animate-pulse-dot rounded-full bg-teal-400" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-500" />
-          </span>
-          New · 2026 cohort enrolling now
-        </motion.div>
-
-        <motion.h1
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={1}
-          className="font-display mt-6 max-w-4xl text-5xl text-white sm:text-6xl md:text-7xl"
-        >
-          Master what matters.
-          <br />
-          <span className="italic text-teal-400">Learn from the best.</span>
-        </motion.h1>
-
-        <motion.p
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={2}
-          className="mt-6 max-w-xl text-base leading-body text-white/70 md:text-lg"
-        >
-          10,000+ courses taught by world-class practitioners. Watch, build,
-          and ship — at your pace.
-        </motion.p>
-
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={3}
-          className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-        >
-          <a
-            href="#pricing"
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-teal-500 px-6 py-3.5 text-sm font-medium text-black shadow-glow transition-all duration-150 hover:bg-teal-400 hover:shadow-[0_0_60px_-8px_rgba(20,184,166,0.8)]"
-          >
-            Start free trial
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-0.5" />
-          </a>
-          <a
-            href="#features"
-            className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/90 backdrop-blur-md transition-colors duration-150 hover:bg-white/[0.07] hover:text-white"
-          >
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-white/10">
-              <Play className="h-2.5 w-2.5 fill-white text-white" />
-            </span>
-            Watch how it works
-          </a>
-        </motion.div>
-
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="show"
-          custom={4}
-          className="mt-12"
-        >
-          <div className="text-[11px] uppercase tracking-[0.18em] text-white/40">
-            Trusted by learners at
-          </div>
-          <div className="mt-4 flex flex-wrap items-center gap-x-8 gap-y-3 opacity-60">
-            <GoogleMark className="h-5 w-auto text-white/80" />
-            <StripeMark className="h-5 w-auto text-white/80" />
-            <AirbnbMark className="h-5 w-auto text-white/80" />
-            <NotionMark className="h-5 w-auto text-white/80" />
-            <SpotifyMark className="h-5 w-auto text-white/80" />
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Bottom: scroll cue + live stats */}
-      <div className="absolute inset-x-0 bottom-6 z-10 mx-auto flex max-w-7xl items-end justify-between px-6">
-        <div className="hidden items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-white/40 md:flex">
-          <div className="relative h-12 w-px overflow-hidden bg-white/15">
-            <span
-              aria-hidden="true"
-              className="absolute left-0 top-0 h-3 w-px animate-drop-dot bg-teal-400"
-            />
-          </div>
-          Scroll
+      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center pt-20">
+        <div className="liquid-glass-dark rounded-full px-4 py-1.5 inline-flex items-center gap-2 text-xs font-medium text-white/90">
+          <Sparkles size={14} className="text-[#e0b458] relative z-10" />
+          <span className="relative z-10">Now with AI-powered learning paths</span>
         </div>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-1 text-xs text-white/55">
-          <span>
-            <span className="text-white">2.4M</span> learners
+
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl text-white mt-6 mb-6 tracking-tight leading-[1.05]"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          Learn <em className="italic text-[#e0b458]">anything</em>. Become someone.
+        </h1>
+
+        <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
+          Master in-demand skills with world-class instructors from Stanford, MIT, and
+          Google. Earn certificates that move careers forward — at your pace, on your
+          schedule.
+        </p>
+
+        <form
+          onSubmit={onSubmit}
+          className="max-w-xl mx-auto liquid-glass-dark rounded-full pl-6 pr-2 py-2 flex items-center gap-3"
+        >
+          <input
+            name="email"
+            type="email"
+            required
+            placeholder="Enter your email to start free"
+            className="flex-1 bg-transparent outline-none text-white placeholder:text-white/50 text-base relative z-10"
+          />
+          <button
+            type="submit"
+            className="bg-[#e0b458] hover:bg-[#f2d184] text-[#0a192f] rounded-full px-6 py-3 flex items-center gap-2 text-sm font-medium transition-colors relative z-10"
+          >
+            Start free
+            <ArrowRight size={18} />
+          </button>
+        </form>
+
+        <div className="mt-6 flex items-center justify-center gap-6 text-xs text-white/70 flex-wrap">
+          <span>✓ No credit card required</span>
+          <span>✓ 7-day free trial</span>
+          <span>✓ Cancel anytime</span>
+        </div>
+
+        <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
+          <span className="liquid-glass-dark rounded-full px-4 py-2 text-xs text-white/90 relative">
+            <span className="relative z-10">🎓 Trusted by 2M+ learners</span>
           </span>
-          <span className="text-white/25">·</span>
-          <span>
-            <span className="text-white">12k</span> courses
+          <span className="liquid-glass-dark rounded-full px-4 py-2 text-xs text-white/90 relative">
+            <span className="relative z-10">⭐ 4.8 average course rating</span>
           </span>
-          <span className="text-white/25">·</span>
-          <span>
-            <span className="text-white">98%</span> completion
+          <span className="liquid-glass-dark rounded-full px-4 py-2 text-xs text-white/90 relative">
+            <span className="relative z-10">🏆 92% completion rate</span>
           </span>
         </div>
       </div>
