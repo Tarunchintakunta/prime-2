@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
   { label: "Courses", href: "#courses" },
   { label: "Paths", href: "#paths" },
   { label: "For Business", href: "#features" },
   { label: "For Universities", href: "#trust" },
-  { label: "Pricing", href: "#pricing" },
 ];
 
 export function Navigation() {
@@ -42,55 +41,47 @@ export function Navigation() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 transition-transform duration-300 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-out ${
           hidden && !mobileOpen ? "-translate-y-full" : "translate-y-0"
+        } ${
+          scrolled
+            ? "bg-[#0a192f]/85 backdrop-blur-xl border-b border-white/10"
+            : "bg-transparent border-b border-transparent"
         }`}
       >
-        <div
-          className={`max-w-7xl mx-auto rounded-full px-4 md:px-6 py-3 flex items-center justify-between transition-all duration-300 ${
-            scrolled ? "liquid-glass-dark" : ""
-          }`}
-        >
-          <div className="flex items-center gap-8">
-            <a href="#top" className="flex items-center relative z-10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/logo-dark.svg"
-                alt="Prime Learning"
-                className="h-10 w-auto transition-opacity"
-              />
-            </a>
-            <ul className="hidden md:flex gap-7 relative z-10">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className={`${linkClass} transition-colors text-sm font-medium`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="w-full pl-3 pr-3 sm:pl-4 sm:pr-5 md:pl-6 md:pr-10 h-20 sm:h-24 md:h-28 grid grid-cols-[auto_1fr_auto] items-center gap-2">
+          <a href="#top" className="flex items-center -my-2 justify-self-start">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-dark.svg"
+              alt="Prime Learning"
+              className="h-14 sm:h-16 md:h-20 w-auto"
+            />
+          </a>
 
-          <div className="flex items-center gap-2 md:gap-3 relative z-10">
-            <button
-              type="button"
-              aria-label="Search"
-              className={`liquid-glass-dark rounded-full p-2.5 ${iconBtnClass} transition-colors hidden sm:inline-flex`}
-            >
-              <Search size={18} className="relative z-10" />
-            </button>
+          <ul className="hidden md:flex gap-8 justify-self-center">
+            {NAV_LINKS.map((link) => (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className={`${linkClass} transition-colors text-sm tracking-wide whitespace-nowrap`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-2 md:gap-4 justify-self-end">
             <a
               href="#"
-              className={`hidden sm:inline-block ${linkClass} text-sm font-medium px-4 py-2 transition-colors`}
+              className={`hidden sm:inline-block ${linkClass} text-sm tracking-wide px-2 py-2 transition-colors`}
             >
               Sign in
             </a>
             <a
               href="#pricing"
-              className="bg-[#e0b458] hover:bg-[#f2d184] text-[#0a192f] rounded-full px-5 py-2.5 text-sm font-medium transition-colors"
+              className="hidden sm:inline-block bg-[#e0b458] hover:bg-[#f2d184] text-[#0a192f] px-4 md:px-5 py-2 text-sm font-semibold tracking-wide transition-colors"
             >
               Get started
             </a>
@@ -98,9 +89,9 @@ export function Navigation() {
               type="button"
               aria-label="Open menu"
               onClick={() => setMobileOpen(true)}
-              className={`md:hidden liquid-glass-dark rounded-full p-2.5 ${iconBtnClass}`}
+              className={`md:hidden p-2 ${iconBtnClass}`}
             >
-              <Menu size={18} className="relative z-10" />
+              <Menu size={22} />
             </button>
           </div>
         </div>
