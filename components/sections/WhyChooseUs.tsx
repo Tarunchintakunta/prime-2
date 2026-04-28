@@ -139,7 +139,7 @@ function RotatingHeadline({
   items: string[];
 }) {
   return (
-    <div className="relative mt-4 h-[1.1em] overflow-hidden font-display text-4xl text-white md:text-6xl">
+    <div className="relative mt-4 h-[1.15em] overflow-hidden font-display text-5xl leading-[1.1] text-white md:text-7xl">
       {items.map((label, i) => (
         <RotatingHeadlineItem
           key={label}
@@ -199,15 +199,28 @@ function ProgressDot({
 /* ── Lightweight inline "illustrations" ─────────────────────────────────── */
 
 function PractitionerVisual() {
+  const companies = [
+    "Stripe",
+    "Pixar",
+    "NASA",
+    "Google",
+    "Apple",
+    "Meta",
+    "OpenAI",
+    "Tesla",
+    "Netflix",
+  ];
   return (
     <div className="relative h-full w-full bg-mesh-teal">
       <div className="absolute inset-0 grid grid-cols-3 gap-2 p-5">
-        {Array.from({ length: 9 }).map((_, i) => (
+        {companies.map((name, i) => (
           <div
-            key={i}
-            className="rounded-md border border-white/5 bg-white/[0.03]"
+            key={name}
+            className="grid place-items-center rounded-md border border-white/5 bg-white/[0.03] text-[11px] font-medium uppercase tracking-[0.18em] text-white/70"
             style={{ animationDelay: `${i * 80}ms` }}
-          />
+          >
+            {name}
+          </div>
         ))}
       </div>
       <div className="absolute left-5 top-5 h-2 w-2 rounded-full bg-teal-400 shadow-glow-sm" />
@@ -259,8 +272,8 @@ function FlowVisual() {
         />
         <defs>
           <linearGradient id="g" x1="0" x2="1">
-            <stop offset="0" stopColor="#14B8A6" />
-            <stop offset="1" stopColor="#F59E0B" />
+            <stop offset="0" stopColor="#e0b458" />
+            <stop offset="1" stopColor="#f2d184" />
           </linearGradient>
         </defs>
       </svg>

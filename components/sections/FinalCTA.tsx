@@ -16,7 +16,7 @@ export function FinalCTA() {
       {/* Soft, restrained gradient + floating orbs (no AI-soup blobs) */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_30%,rgba(20,184,166,0.18),transparent_55%),radial-gradient(circle_at_80%_80%,rgba(99,102,241,0.10),transparent_55%)]"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_50%_30%,rgba(224,180,88,0.18),transparent_55%),radial-gradient(circle_at_80%_80%,rgba(99,102,241,0.10),transparent_55%)]"
       />
       <div
         aria-hidden="true"
@@ -80,7 +80,7 @@ export function FinalCTA() {
           <button
             type="submit"
             disabled={submitted}
-            className="group inline-flex items-center justify-center gap-2 rounded-full bg-teal-500 px-6 py-3.5 text-sm font-medium text-black shadow-glow transition-all duration-150 hover:bg-teal-400 hover:shadow-[0_0_60px_-8px_rgba(20,184,166,0.8)] disabled:opacity-60"
+            className="group inline-flex items-center justify-center gap-2 rounded-full bg-teal-500 px-6 py-3.5 text-sm font-medium text-black shadow-glow transition-all duration-150 hover:bg-teal-400 hover:shadow-[0_0_60px_-8px_rgba(224,180,88,0.8)] disabled:opacity-60"
           >
             {submitted ? "You're in ✓" : "Start free trial"}
             {!submitted && (

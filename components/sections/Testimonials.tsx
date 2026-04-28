@@ -86,7 +86,7 @@ export function Testimonials() {
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(20,184,166,0.10),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(224,180,88,0.10),transparent_60%)]"
       />
 
       <div className="relative mx-auto max-w-7xl px-6">

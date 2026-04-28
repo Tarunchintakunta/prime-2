@@ -36,10 +36,8 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const linkClass = scrolled
-    ? "text-slate-700 hover:text-slate-900"
-    : "text-white/85 hover:text-white";
-  const iconBtnClass = scrolled ? "text-slate-700" : "text-white";
+  const linkClass = "text-white/85 hover:text-white";
+  const iconBtnClass = "text-white";
 
   return (
     <>
@@ -50,16 +48,16 @@ export function Navigation() {
       >
         <div
           className={`max-w-7xl mx-auto rounded-full px-4 md:px-6 py-3 flex items-center justify-between transition-all duration-300 ${
-            scrolled ? "liquid-glass-light" : ""
+            scrolled ? "liquid-glass-dark" : ""
           }`}
         >
           <div className="flex items-center gap-8">
             <a href="#top" className="flex items-center relative z-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={scrolled ? "/logo.svg" : "/logo-dark.svg"}
+                src="/logo-dark.svg"
                 alt="Prime Learning"
-                className="h-8 w-auto transition-opacity"
+                className="h-10 w-auto transition-opacity"
               />
             </a>
             <ul className="hidden md:flex gap-7 relative z-10">
@@ -80,9 +78,7 @@ export function Navigation() {
             <button
               type="button"
               aria-label="Search"
-              className={`${
-                scrolled ? "liquid-glass-light" : "liquid-glass-dark"
-              } rounded-full p-2.5 ${iconBtnClass} transition-colors hidden sm:inline-flex`}
+              className={`liquid-glass-dark rounded-full p-2.5 ${iconBtnClass} transition-colors hidden sm:inline-flex`}
             >
               <Search size={18} className="relative z-10" />
             </button>
@@ -102,9 +98,7 @@ export function Navigation() {
               type="button"
               aria-label="Open menu"
               onClick={() => setMobileOpen(true)}
-              className={`md:hidden ${
-                scrolled ? "liquid-glass-light" : "liquid-glass-dark"
-              } rounded-full p-2.5 ${iconBtnClass}`}
+              className={`md:hidden liquid-glass-dark rounded-full p-2.5 ${iconBtnClass}`}
             >
               <Menu size={18} className="relative z-10" />
             </button>

@@ -109,7 +109,7 @@ const COURSES: Course[] = [
     instructor: "Theo Park",
     avatar: "https://i.pravatar.cc/80?img=68",
     thumbnail:
-      "https://images.unsplash.com/photo-1561070791-2526d30994b8?auto=format&fit=crop&w=1200&q=70",
+      "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1200&q=70",
     rating: 4.8,
     reviews: "3.6k",
     price: "AED 229",

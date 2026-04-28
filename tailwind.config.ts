@@ -10,17 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         ink: {
-          950: "#0A0A0B",
-          900: "#111114",
-          850: "#16161A",
-          800: "#1C1C22",
-          700: "#26262E",
+          950: "#061224",
+          900: "#0a192f",
+          850: "#0e1726",
+          800: "#112240",
+          700: "#162133",
         },
         teal: {
-          DEFAULT: "#14B8A6",
-          400: "#2DD4BF",
-          500: "#14B8A6",
-          600: "#0D9488",
+          DEFAULT: "#e0b458",
+          300: "#f2d184",
+          400: "#e0b458",
+          500: "#d4a44a",
+          600: "#b88d3a",
         },
         amber: {
           DEFAULT: "#F59E0B",
@@ -40,15 +41,15 @@ const config: Config = {
         "8xl": "88rem",
       },
       boxShadow: {
-        glow: "0 0 40px -8px rgba(20,184,166,0.55)",
-        "glow-sm": "0 0 24px -6px rgba(20,184,166,0.45)",
+        glow: "0 0 40px -8px rgba(224,180,88,0.55)",
+        "glow-sm": "0 0 24px -6px rgba(224,180,88,0.45)",
         "glow-amber": "0 0 32px -8px rgba(245,158,11,0.4)",
       },
       backgroundImage: {
         "radial-vignette":
           "radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(0,0,0,0.55) 75%, rgba(0,0,0,0.95) 100%)",
         "mesh-teal":
-          "radial-gradient(circle at 20% 20%, rgba(20,184,166,0.18), transparent 45%), radial-gradient(circle at 80% 60%, rgba(99,102,241,0.12), transparent 50%)",
+          "radial-gradient(circle at 20% 20%, rgba(224,180,88,0.18), transparent 45%), radial-gradient(circle at 80% 60%, rgba(99,102,241,0.12), transparent 50%)",
       },
       keyframes: {
         marquee: {
